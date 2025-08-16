@@ -14,6 +14,9 @@
 </head>
 
 <body>
+  {% if request.resolver_match %}
+  {% if request.resolver_match.url_name != "login" %}
+  {% if request.resolver_match.url_name != "register" %}
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
@@ -30,19 +33,19 @@
         <!-- Items de la izquierda -->
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'feed' %}active{% endif %}"
+            <a class="nav-link {% if request.resolver_match.url_name == 'feed' %}active{% endif %}"
               href="{% url 'posts:feed' %}">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'categorias' %}active{% endif %}"
+            <a class="nav-link {% if request.resolver_match.url_name == 'categorias' %}active{% endif %}"
               href="{% url 'posts:categorias' %}">Categorías</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'acerca' %}active{% endif %}"
+            <a class="nav-link {% if request.resolver_match.url_name == 'acerca' %}active{% endif %}"
               href="{% url 'posts:acerca' %}">Acerca</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'contacto' %}active{% endif %}"
+            <a class="nav-link {% if request.resolver_match.url_name == 'contacto' %}active{% endif %}"
               href="{% url 'posts:contacto' %}">Contacto</a>
           </li>
         </ul>
@@ -72,7 +75,7 @@
             </form>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match and request.resolver_match.url_name == 'mis_comentarios' %}active{% endif %}"
+            <a class="nav-link {% if request.resolver_match.url_name == 'mis_comentarios' %}active{% endif %}"
               href="{% url 'usuarios:mis_comentarios' %}">Mis comentarios</a>
           </li>
           {% else %}
@@ -87,6 +90,9 @@
       </div>
     </div>
   </nav>
+  {% endif %}
+  {% endif %}
+  {% endif %}
 
   <!-- CONTENIDO -->
   <main class="container py-4">
