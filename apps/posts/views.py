@@ -17,6 +17,9 @@ ORDENES = {
     "titulo_desc": "-titulo",
 }
 
+
+
+
 def _rol(u): 
     return getattr(u, "rol", "visitante")
 
