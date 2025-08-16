@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-9">
+      <h1 class="h3 mb-3">{{ titulo_pagina }}</h1>
+
+      <form class="mb-3">
+        <input type="hidden" name="page" value="{{ page_obj.number|default:1 }}">
+        <div class="d-inline-flex align-items-center gap-2">
+          <label class="text-muted">Ordenar por:</label>
+          <select name="orden" class="form-select form-select-sm" onchange="this.form.submit()">
+            <option value="fecha_desc" {% if orden == "fecha_desc" %}selected{% endif %}>Más recientes</option>
+            <option value="fecha_asc"  {% if orden == "fecha_asc" %}selected{% endif %}>Más antiguos</option>
+            <option value="titulo_asc" {% if orden == "titulo_asc" %}selected{% endif %}>Título A→Z</option>
+            <option value="titulo_desc"{% if orden == "titulo_desc" %}selected{% endif %}>Título Z→A</option>
+          </select>
+        </div>
+      </form>
+
+      {% if page_obj.object_list %}
+        <div class="row g-3">
+          {% for post in page_obj.object_list %}
+            <div class="col-md-6">
+              <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                  <div class="mb-2 d-flex flex-wrap gap-2">
+                    {% for c in post.categorias.all %}
+                      <a href="{% url 'posts:feed_categoria' c.pk %}" class="badge-cat text-decoration-none">{{ c.nombre }}</a>
+                    {% endfor %}
+                  </div>
+
+                  <h5 class="card-title">{{ post.titulo }}</h5>
+                  <p class="card-text mb-3">{{ post.resumen|default:post.contenido|truncatewords:28 }}</p>
+
+                  <a href="{% url 'posts:post_detalle' post.pk %}" class="btn btn-primary mt-auto">Leer más</a>
+                </div>
+
+                <div class="card-footer bg-transparent">
+                  <div class="post-meta">
+                    {% if post.autor.avatar %}
+                      <img src="{{ post.autor.avatar.url }}" alt="{{ post.autor }}">
+                    {% endif %}
+                    <span>Por {{ post.autor }} · {{ post.fecha_hora|date:"d/m/Y H:i" }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <nav aria-label="Paginación" class="mt-4">
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&orden={{ orden }}">Anterior</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&orden={{ orden }}">Siguiente</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% else %}
+        <div class="alert alert-info">No hay publicaciones todavía.</div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-3">
+      <div class="sticky-top" style="top: 80px;">
+        <div class="list-group mb-3">
+          <a class="list-group-item list-group-item-action {% if not categoria_activa %}active{% endif %}" href="{% url 'posts:feed' %}">
+            Todas las categorías
+          </a>
+          {% for c in categorias %}
+            <a class="list-group-item list-group-item-action {% if categoria_activa and c.pk == categoria_activa.pk %}active{% endif %}"
+               href="{% url 'posts:feed_categoria' c.pk %}">{{ c.nombre }}</a>
+          {% endfor %}
+        </div>
+
+        {% if user.is_authenticated %}
+          {% if user.rol == "escritor" or user.rol == "admin" %}
+            <a href="{% url 'posts:post_crear' %}" class="btn btn-success w-100">Nueva publicación</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

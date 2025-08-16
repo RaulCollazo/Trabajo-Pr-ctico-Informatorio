@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Categorías — tendencIA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">{{ titulo_pagina }}</h1>
+    <form method="get" class="d-flex" role="search">
+      <input name="q" value="{{ q }}" class="form-control form-control-sm" placeholder="Buscar categoría…">
+    </form>
+  </div>
+
+  {% if categorias %}
+    <div class="row g-3">
+      {% for cat in categorias %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <a href="{% url 'posts:feed_categoria' cat.pk %}" class="text-decoration-none">
+            <div class="card h-100 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h2 class="h5 mb-1">{{ cat.nombre }}</h2>
+                  <span class="badge bg-secondary">{{ cat.post_set.count }}</span>
+                </div>
+                {% if cat.descripcion %}
+                  <p class="text-muted small mb-0 mt-1">{{ cat.descripcion|truncatechars:120 }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hay categorías que coincidan con tu búsqueda.</div>
+  {% endif %}
+</div>
+{% endblock %}
