@@ -17,11 +17,12 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["titulo", "resumen", "contenido", "categorias", "tags"]
+        fields = ["titulo", "resumen", "contenido", "categorias", "tags", "imagen"]  # <-- incluir imagen
         widgets = {
             "titulo": forms.TextInput(attrs={"class": "form-control"}),
             "resumen": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             "contenido": forms.Textarea(attrs={"class": "form-control", "rows": 10}),
+            "imagen": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }
 
     def __init__(self, *args, **kwargs):

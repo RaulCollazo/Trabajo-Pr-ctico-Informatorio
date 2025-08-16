@@ -44,6 +44,8 @@ class Post(models.Model):
     )
     categorias = models.ManyToManyField(Categoria, related_name='posts', blank=True)
     tags = models.ManyToManyField(Tag, related_name='posts', blank=True)
+    
+    imagen = models.ImageField(upload_to='post_images/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo
