@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Crear cuenta{% endblock %}
+
+{% block content %}
+<style>
+  /* Estilo específico solo para el botón Crear cuenta */
+  #btn-crear-cuenta {
+    background-color: #6366F1;
+    border-color: #6366F1;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(99,102,241,.25);
+    padding: 8px 16px;
+    width: auto; /* menos ancho, ajustado al contenido */
+  }
+  #btn-crear-cuenta:hover {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+  }
+</style>
+
+<div class="d-flex flex-column justify-content-center align-items-center vh-100" style="gap: 1rem;">
+  <!-- Card del formulario -->
+  <div class="card shadow-sm" style="width: 400px; border-radius: 12px;">
+    <div class="card-body p-4">
+      <h2 class="mb-3" style="font-family: 'Inter', sans-serif; font-size: 20px;">Crear cuenta</h2>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="text-danger small">{{ form.non_field_errors|striptags }}</div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="text-danger small">{{ form.username.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="text-danger small">{{ form.email.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <div class="text-danger small">{{ form.password1.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Confirmación de contraseña</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <div class="text-danger small">{{ form.password2.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Botón más compacto y alineado a la izquierda -->
+        <div class="d-flex flex-column align-items-start">
+          <button type="submit" id="btn-crear-cuenta" class="btn mb-2">Crear cuenta</button>
+          <a href="{% url 'usuarios:login' %}" style="color: #6366F1; text-decoration: none;">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
