@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <div class="card"><div class="card-body">
+    <h1 class="h5 mb-3">Editar comentario</h1>
+    <form method="post">{% csrf_token %}
+      <div class="mb-3">{{ form.contenido }}</div>
+      <button class="btn btn-primary">Guardar</button>
+      <a href="{% url 'posts:post_detalle' object.post.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div></div>
+</div>
+{% endblock %}

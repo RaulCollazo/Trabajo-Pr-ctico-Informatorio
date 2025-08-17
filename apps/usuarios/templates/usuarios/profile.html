@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Mi perfil{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body d-flex align-items-center gap-3">
+
+          <span class="avatar" style="width:72px;height:72px;border-radius:50%;overflow:hidden;background:#f2f2f2;display:inline-block;">
+            {% if request.user.avatar %}
+              <img src="{{ request.user.avatar.url }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+              <svg viewBox="0 0 24 24" width="72" height="72" fill="#c9d6e8">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+              </svg>
+            {% endif %}
+          </span>
+
+          <div>
+            <h1 class="h5 mb-1">
+              Hola, {{ request.user.get_full_name|default:request.user.username }}
+            </h1>
+            <div class="text-muted">
+              Rol: {{ request.user.rol }} · Edad: {{ request.user.edad }} · Email: {{ request.user.email }}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-white">
+          <div class="d-flex flex-wrap gap-2 w-100">
+            <a class="btn btn-primary" href="{% url 'usuarios:profile_edit' %}">Editar perfil</a>
+            <a class="btn btn-outline-primary" href="{% url 'usuarios:password_change' %}">Cambiar contraseña</a>
+
+            <form method="post" action="{% url 'usuarios:logout' %}" class="ms-auto">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger" type="submit">Cerrar sesión</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mis últimos comentarios -->
+      <div class="card shadow-sm border-0 mt-4">
+        <div class="card-body">
+          <h2 class="h6 mb-3">Mis últimos comentarios</h2>
+
+          {% if ultimos_comentarios %}
+            <ul class="list-group">
+              {% for c in ultimos_comentarios %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                  <div class="me-3">
+                    <div class="small text-muted mb-1">
+                      {{ c.fecha_hora|date:"d/m/Y H:i" }} en
+                      <a href="{% url 'posts:post_detalle' c.post.pk %}#comentario-{{ c.pk }}">{{ c.post.titulo }}</a>
+                    </div>
+                    <div>{{ c.contenido|truncatechars:120 }}</div>
+                  </div>
+                  <div class="text-nowrap">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'posts:comentario_editar' c.pk %}">Editar</a>
+                    <a class="btn btn-sm btn-outline-danger ms-1" href="{% url 'posts:comentario_eliminar' c.pk %}">Eliminar</a>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="mt-2">
+              <a class="btn btn-sm btn-outline-primary" href="{% url 'usuarios:mis_comentarios' %}">Ver todos</a>
+            </div>
+          {% else %}
+            <div class="alert alert-secondary mb-0">Todavía no hiciste comentarios.</div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

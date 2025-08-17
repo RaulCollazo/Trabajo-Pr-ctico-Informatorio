@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="h4 mb-3">{% if object %}Editar publicación{% else %}Nueva publicación{% endif %}</h1>
+  <div class="row g-4">
+    <div class="col-lg-9">
+      <div class="card">
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Título</label>
+              {{ form.titulo }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Resumen</label>
+              {{ form.resumen }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contenido</label>
+              {{ form.contenido }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Imagen</label>
+              {{ form.imagen }}
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Categorías existentes</label>
+                {{ form.categorias }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Nueva categoría</label>
+                {{ form.nueva_categoria }}
+                <div class="form-text">Si escribís una, se creará automáticamente.</div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <label class="form-label">Tags</label>
+              {{ form.tags }}
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+              <button type="submit" class="btn btn-success">Guardar</button>
+              <a href="{% url 'posts:feed' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="small text-muted">Consejo</div>
+          <p class="mb-0">Usá un buen <strong>resumen</strong> (1–2 líneas). Ayuda mucho al feed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

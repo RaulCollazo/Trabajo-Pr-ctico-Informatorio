@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-9">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'posts:feed' %}">Inicio</a></li>
+          {% for c in post.categorias.all %}
+          <li class="breadcrumb-item"><a href="{% url 'posts:feed_categoria' c.pk %}">{{ c.nombre }}</a></li>
+          {% endfor %}
+          <li class="breadcrumb-item active" aria-current="page">{{ post.titulo }}</li>
+        </ol>
+      </nav>
+
+      <article class="mb-4">
+        <h1 class="h2 mb-1">{{ post.titulo }}</h1>
+        <div class="post-meta mb-3 d-flex align-items-center gap-2">
+          {% if post.autor.avatar %}
+          <img src="{{ post.autor.avatar.url }}" alt="{{ post.autor }}" class="rounded-circle post-meta-avatar">
+          {% endif %}
+          <span>Por {{ post.autor }} · {{ post.fecha_hora|date:"d/m/Y H:i" }}</span>
+        </div>
+
+        {% if post.resumen %}<p class="lead">{{ post.resumen }}</p>{% endif %}
+
+        {% if post.imagen %}
+        <div class="mb-3">
+          <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" class="img-fluid rounded">
+        </div>
+        {% endif %}
+
+        <div class="fs-6">{{ post.contenido|linebreaks }}</div>
+
+        {% if post.tags.all %}
+        <div class="mt-3 d-flex flex-wrap gap-2">
+          {% for t in post.tags.all %}
+          <span class="badge-cat">#{{ t.nombre }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </article>
+
+      {% if user.is_authenticated %}
+      {% if user.rol == "admin" %}
+      <div class="mb-3 d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'posts:post_editar' post.pk %}">Editar</a>
+        <a class="btn btn-outline-danger" href="{% url 'posts:post_eliminar' post.pk %}">Eliminar</a>
+      </div>
+      {% elif user.rol == "escritor" and user == post.autor %}
+      <div class="mb-3 d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'posts:post_editar' post.pk %}">Editar</a>
+        <a class="btn btn-outline-danger" href="{% url 'posts:post_eliminar' post.pk %}">Eliminar</a>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <section id="comentarios" class="mt-5">
+        <h2 class="h5 mb-3">Comentarios ({{ comentarios|length }})</h2>
+
+        {% if comentarios %}
+        <div>
+          {% for c in comentarios %}
+          <div id="comentario-{{ c.pk }}" class="comment mb-3">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <div>
+                  <strong>{{ c.usuario }}</strong>
+                  <small class="text-muted">· {{ c.fecha_hora|date:"d/m/Y H:i" }}</small>
+                </div>
+                <div class="mt-2">{{ c.contenido|linebreaks }}</div>
+              </div>
+
+              {% if user.is_authenticated %}
+              {% if c.usuario_id == user.id or user.rol == "escritor" or user.rol == "admin" %}
+              <div class="text-nowrap">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'posts:comentario_editar' c.pk %}">Editar</a>
+                <a class="btn btn-sm btn-outline-danger ms-1"
+                  href="{% url 'posts:comentario_eliminar' c.pk %}">Eliminar</a>
+              </div>
+              {% endif %}
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-secondary">Sé el primero en comentar.</div>
+        {% endif %}
+
+        {% if form %}
+        <div class="card mt-3">
+          <div class="card-body">
+            <form method="post" novalidate>
+              {% csrf_token %}
+              <div class="mb-3">{{ form.contenido }}</div>
+              <button type="submit" class="btn btn-primary">Publicar comentario</button>
+            </form>
+          </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info mt-3">
+          Para comentar, iniciá sesión con rol lector/escritor/admin.
+          <a href="{% url 'usuarios:login' %}?next={{ request.path }}">Ir a login</a>
+        </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <div class="col-lg-3">
+      {% with c=post.categorias.first %}
+      {% if c %}
+      <a class="btn btn-outline-secondary w-100 mb-3" href="{% url 'posts:feed_categoria' c.pk %}">Más en {{ c.nombre
+        }}</a>
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</div>
+{% endblock %}

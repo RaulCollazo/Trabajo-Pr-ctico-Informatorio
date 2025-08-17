@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Editar perfil{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+          <h1 class="h5 mb-0">Editar perfil</h1>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}<div class="text-danger small">{{ form.first_name.errors|striptags }}</div>{% endif %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Apellido</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}<div class="text-danger small">{{ form.last_name.errors|striptags }}</div>{% endif %}
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors|striptags }}</div>{% endif %}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Edad</label>
+                {{ form.edad }}
+                {% if form.edad.errors %}<div class="text-danger small">{{ form.edad.errors|striptags }}</div>{% endif %}
+              </div>
+              <div class="col-12">
+                <label class="form-label d-block">Avatar</label>
+                <div class="d-flex align-items-center gap-3">
+                  <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background:#f2f2f2;">
+                    {% if request.user.avatar %}
+                      <img src="{{ request.user.avatar.url }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+                    {% else %}
+                      <svg viewBox="0 0 24 24" width="64" height="64" fill="#c9d6e8">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                      </svg>
+                    {% endif %}
+                  </div>
+                  <div class="flex-grow-1">
+                    {{ form.avatar }}
+                    {% if form.avatar.errors %}<div class="text-danger small">{{ form.avatar.errors|striptags }}</div>{% endif %}
+                    <div class="form-text">PNG/JPG, máx. 2MB.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <a href="{% url 'usuarios:profile' %}" class="btn btn-outline-secondary">Cancelar</a>
+              <button class="btn btn-primary" type="submit">Guardar cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="text-center text-muted small mt-3">
+        ¿Querés cambiar la contraseña? <a href="{% url 'usuarios:password_change' %}">Hacelo aquí</a>.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

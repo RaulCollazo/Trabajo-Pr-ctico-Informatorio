@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}tendencIA{% endblock %}</title>
+  {% load static %}
+
+  <link rel="icon" href="{% static 'img/icon.png' %}?v=1" type="image/png">
+  <link rel="shortcut icon" href="{% static 'img/icon.ico' %}?v=1" type="image/x-icon">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+
+<body>
+  {% if request.resolver_match %}
+  {% if request.resolver_match.url_name != "login" %}
+  {% if request.resolver_match.url_name != "register" %}
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="{% url 'posts:feed' %}">
+        Tendenc<span class="logo-ia">IA</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <!-- Items de la izquierda -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'feed' %}active{% endif %}"
+              href="{% url 'posts:feed' %}">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'categorias' %}active{% endif %}"
+              href="{% url 'posts:categorias' %}">Categorías</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'acerca' %}active{% endif %}"
+              href="{% url 'posts:acerca' %}">Acerca</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'contacto' %}active{% endif %}"
+              href="{% url 'posts:contacto' %}">Contacto</a>
+          </li>
+        </ul>
+
+        <!-- Items de la derecha (estado de sesión + auth) -->
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item d-flex align-items-center">
+            {% if user.is_authenticated %}
+            {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="avatar" class="rounded-circle me-2"
+              style="width:28px;height:28px;object-fit:cover;">
+            {% endif %}
+            <span class="navbar-text">Hola!, {{ user.first_name|default:user.username }}</span>
+            {% else %}
+            <span class="navbar-text">Hola!, visitante</span>
+            {% endif %}
+          </li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="btn btn-navbar" href="{% url 'usuarios:profile' %}">Mi cuenta</a>
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'usuarios:logout' %}" class="d-inline m-0 p-0">
+              {% csrf_token %}
+              <button class="btn btn-navbar" type="submit">Salir</button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'mis_comentarios' %}active{% endif %}"
+              href="{% url 'usuarios:mis_comentarios' %}">Mis comentarios</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'usuarios:login' %}?next={{ request.path }}">Ingresar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'usuarios:register' %}">Registrarse</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% endif %}
+  {% endif %}
+  {% endif %}
+
+  <!-- CONTENIDO -->
+  <main class="container py-4">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="text-center text-muted py-4">
+    © {% now "Y" %} tendencIA — Blog de IA ·
+    <a href="{% url 'posts:acerca' %}">Acerca</a> ·
+    <a href="{% url 'posts:contacto' %}">Contacto</a>
+  </footer>
+</body>
+
+</html>

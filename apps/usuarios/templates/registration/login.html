@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="col-md-5">
+    <!-- Título con estilos personalizados -->
+    <div class="mb-3 text-start">
+      <h1 style="font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 600;">
+          <span style="color: #475569;">Bienvenido a </span><span style="color: #475569;">Tendenc</span><span style="color: #6366F1;">IA</span>
+      </h1>
+      <h1 style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;">
+        Crea una cuenta o inicia sesión para enterarte de las últimas tendencias de IA... <span style="color: #475569;">
+      </h1>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label">Usuario</label>
+            <input type="text" name="username" autofocus required class="form-control" id="id_username">
+          </div>
+          <div class="mb-3">
+            <label for="id_password" class="form-label">Contraseña</label>
+            <input type="password" name="password" required class="form-control" id="id_password">
+          </div>
+          
+          <div class="d-flex align-items-center mb-1">
+            <button type="submit" class="btn btn-entrar custom-btn me-3">Entrar</button>
+            <div class="d-flex flex-column">
+              <a href="{% url 'usuarios:password_reset' %}" style="color: #6366F1; text-decoration: none;">¿Olvidaste tu contraseña?</a>
+              <a href="{% url 'usuarios:register' %}" style="color: #6366F1; text-decoration: none;">¿No tienes una cuenta? Crea una aquí</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

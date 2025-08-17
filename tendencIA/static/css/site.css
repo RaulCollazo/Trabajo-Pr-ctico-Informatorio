@@ -1,0 +1,237 @@
+/* --- Vars & base --- */
+:root {
+  --brand: #F5F5F5;
+  --brand-dark: #F5F5F5;
+  --bg: #F5F5F5;
+  --card: #ffffff;
+  --muted: #475569;
+  --radius: 16px;
+  --shadow: 0 6px 20px rgba(16, 24, 40, .08);
+  --shadow-hover: 0 10px 30px rgba(16, 24, 40, .14);
+  --purple: #6366F1;
+  --navbar-color: #0F172A;
+}
+
+html,
+body {
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--navbar-color);
+}
+
+.container {
+  max-width: 1100px;
+}
+
+/* --- Navbar --- */
+.navbar {
+  background: linear-gradient(90deg, #EEF2FF, #EDE9FE);
+  display: flex;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.navbar .navbar-nav.me-auto {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex: 1;
+}
+
+.navbar .nav-link,
+.navbar .nav-link.navbar-text,
+.navbar .btn-link {
+  color: var(--navbar-color) !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  text-decoration: none;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: var(--navbar-color) !important;
+  background-color: transparent !important;
+  text-decoration: none;
+}
+
+/* --- Logo personalizado --- */
+.navbar-brand {
+  font-family: 'Inter', sans-serif;
+  color: var(--navbar-color) !important;
+  font-weight: 700;
+}
+
+.navbar-brand .logo-ia {
+  color: var(--purple);
+}
+
+/* --- Botones auth y navbar --- */
+.navbar .btn-auth,
+.navbar .btn-navbar {
+  background-color: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  padding: .35rem .75rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.navbar .btn-auth+.btn-auth {
+  margin-left: .5rem;
+}
+
+.navbar .btn-auth:hover,
+.navbar .btn-navbar:hover {
+  background-color: #4F46E5;
+  border-color: #4F46E5;
+  color: #fff;
+}
+
+/* --- Navbar derecha: espacio entre items --- */
+.navbar .navbar-nav.ms-auto .nav-item {
+  margin-left: 0.75rem;
+  /* espacio entre cada item */
+}
+
+/* --- Texto de navbar derecho (Hola!, user) --- */
+.navbar .navbar-text {
+  color: var(--navbar-color) !important;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+/* --- Cards --- */
+.card {
+  border: 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease;
+  background: var(--card);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-title {
+  margin-bottom: .25rem;
+}
+
+.card-text {
+  color: var(--muted);
+}
+
+/* --- Badges --- */
+.badge-cat {
+  background: #eef2ff;
+  color: #444;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: .35rem .6rem;
+  font-size: .72rem;
+}
+
+/* --- List lateral --- */
+.list-group-item.active {
+  color: #fff !important;
+  background-color: var(--purple) !important;
+  border-color: var(--purple) !important;
+  font-weight: 600;
+}
+
+/* --- Botones generales --- */
+.btn {
+  border-radius: 10px;
+}
+
+/* --- Botón Leer más morado --- */
+.btn-primary {
+  background-color: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #4F46E5;
+  border-color: #4F46E5;
+  color: #fff;
+}
+
+/* --- Meta del autor --- */
+.post-meta {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.post-meta img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-meta .post-meta-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* --- Comentarios --- */
+.comment {
+  background: #fff;
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.comment+.comment {
+  margin-top: 10px;
+}
+
+/* --- Paginación --- */
+.pagination .page-link {
+  border: 0;
+  border-radius: 10px;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* --- Anclas comentarios --- */
+.comment:target {
+  background: #f0f7ff;
+  border-color: #cde4ff;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, .12) inset;
+}
+
+[id^="comentario-"] {
+  scroll-margin-top: 80px;
+}
+
+/* --- Botón Entrar personalizado --- */
+button.btn-entrar.custom-btn {
+  background-color: var(--purple) !important;
+  border-color: var(--purple) !important;
+  color: #fff !important;
+}
+
+button.btn-entrar.custom-btn:hover {
+  background-color: #4F46E5 !important;
+  border-color: #4F46E5 !important;
+  color: #fff !important;
+}
