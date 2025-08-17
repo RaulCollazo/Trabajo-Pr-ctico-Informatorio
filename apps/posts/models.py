@@ -1,5 +1,8 @@
+# models.py
 from django.db import models
-from django.conf import settings  # para settings.AUTH_USER_MODEL
+from django.conf import settings
+from django.db.models.signals import m2m_changed, post_delete
+from django.dispatch import receiver
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
@@ -44,7 +47,6 @@ class Post(models.Model):
     )
     categorias = models.ManyToManyField(Categoria, related_name='posts', blank=True)
     tags = models.ManyToManyField(Tag, related_name='posts', blank=True)
-    
     imagen = models.ImageField(upload_to='post_images/', blank=True, null=True)
 
     def __str__(self):
@@ -52,3 +54,21 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-fecha_hora']
+
+
+# ----------------------
+# SEÑALES PARA ELIMINAR CATEGORÍAS VACÍAS
+# ----------------------
+@receiver(m2m_changed, sender=Post.categorias.through)
+def eliminar_categorias_vacias(sender, instance, action, **kwargs):
+    if action in ['post_remove', 'post_clear']:
+        for categoria in Categoria.objects.all():
+            if categoria.posts.count() == 0:
+                categoria.delete()
+
+
+@receiver(post_delete, sender=Post)
+def eliminar_categorias_vacias_post(sender, instance, **kwargs):
+    for categoria in Categoria.objects.all():
+        if categoria.posts.count() == 0:
+            categoria.delete()
