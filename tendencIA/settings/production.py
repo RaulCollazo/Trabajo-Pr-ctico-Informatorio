@@ -2,7 +2,7 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','production-domain.com']
 
 
 # Database
@@ -10,8 +10,12 @@ ALLOWED_HOSTS = []
 
 DATABASES = {
  'default': {
- 'ENGINE': 'django.db.backends.sqlite3',
- 'NAME':
-os.path.join(os.path.dirname(BASE_DIR),'db_sqlite3'),
+ 'ENGINE': 'django.db.backends.mysql',
+ 'NAME':os.getenv('DB_NAME'),
+ 'PASSWORD': os.getenv('DB_PASSWORD'),
+ 'HOST': os.getenv('DB_HOST'),
+ 'PORT': os.getenv('DB_PORT'),
  }
 }
+
+os.environ['DJANGO_PORT'] = '8080'
